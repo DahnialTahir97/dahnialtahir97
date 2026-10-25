@@ -1,16 +1,13 @@
-## Hi there 👋
-
-<!--
-**DahnialTahir97/dahnialtahir97** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-
-Here are some ideas to get you started:
-
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+Hi, I'm [MUHAMAD DAHNIAL BIN MOHD TAHIR]
+[Computer Science student at UiTM interested in Inovation product]
+About me
+Studying: [Computer Science], UiTM
+Currently learning: [CSC649]
+My FYP area: [ Data Quality Validation and Error Tracking System Electricity Utility Records]
+Skills and tools
+[Python, Git, SQL]
+Projects
+Project name: Better Brighter
+Contact
+LinkedIn: [-]
+Email: [dahnialtahir97@gmail.com]
