@@ -9,7 +9,6 @@ Skills and tools
 Projects
 Project name: Better Brighter
 Contact
-LinkedIn: [-]
 Email: [dahnialtahir97@gmail.com]
 
 [Better Brigjter]
