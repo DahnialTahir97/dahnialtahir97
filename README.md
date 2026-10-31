@@ -12,7 +12,7 @@ Contact
 Email: [dahnialtahir97@gmail.com]
 
 [Better Brigjter]
-[One sentence: Better Brighter is a project that uses machine learning to help electricity utility data quality officers find unusual electricity records that may need checking]
+Better Brighter is a project that uses machine learning to help electricity utility data quality officers find unusual electricity records that may need checking]
 
 Problem statement
 [Electricity companies need accurate meter readings and customer records. However, some records may have missing information, duplicate entries, inconsistent details, or unusual readings. Finding these records manually can take time and effort. Better Brighter aims to flag unusual records so that staff can check them.]
