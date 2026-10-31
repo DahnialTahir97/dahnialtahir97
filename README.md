@@ -23,7 +23,7 @@ Documents
 -User stories
 
 Status
--Planning (Week 2)
+-Planning
 
 Author
 [Muhamad Dahnial bin Mohd Tahir]
