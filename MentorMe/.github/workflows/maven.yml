@@ -1,0 +1,28 @@
+name: MentorMe Maven Build
+
+on:
+  push:
+    paths:
+      - "MentorMe/**"
+  pull_request:
+    paths:
+      - "MentorMe/**"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: MentorMe
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+      - name: Build and run tests
+        run: mvn --batch-mode verify
