@@ -19,10 +19,12 @@ jobs:
         working-directory: MentorMe
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: "21"
           cache: maven
       - name: Build and test
         run: mvn --batch-mode verify
+      - name: Verify deployment container
+        run: docker build --tag mentorme:ci .
