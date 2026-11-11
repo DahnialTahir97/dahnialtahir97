@@ -15,7 +15,7 @@ public class TutorProfile {
     private String bio;
     @Column(name = "hourly_rate", nullable = false, precision = 8, scale = 2)
     private BigDecimal hourlyRate = BigDecimal.ZERO;
-    protected TutorProfile() {}
+    public TutorProfile() {}
     public Long getTutorProfileId() { return tutorProfileId; }
     public Long getUserId() { return userId; }
     public void setUserId(Long userId) { this.userId = userId; }
