@@ -29,7 +29,7 @@ See `database/schema.sql` for the current MySQL DDL and `database/seed-developme
 - **Thymeleaf:** server-rendered web interface.
 - **MySQL:** relational persistence.
 - **Docker:** reproducible Java runtime image.
-- **Vercel:** target deployment platform. Its current container/backend capabilities can run custom containerized workloads; confirm project/plan availability and deployment configuration when creating the Vercel project.
+- **Vercel:** target deployment platform. Vercel supports OCI container images via Vercel Functions. The Vercel-specific image is `Dockerfile.vercel`. When creating the Vercel project, set the project Root Directory to `MentorMe` so Vercel can detect that file. Confirm current account/plan limits and container availability before production deployment.
 
 The current application is a single Spring Boot web application (UI and server-side logic together), packaged as a container. It is not a separate React/Next.js frontend plus REST API. This avoids maintaining two separate codebases for the current project.
 
@@ -50,7 +50,7 @@ Required: JDK 21, Maven 3.9+, and MySQL 8.0+.
 
 Build check: `mvn --batch-mode verify`.
 
-Container check: `docker build -t mentorme:local .` from this directory.
+Container checks: `docker build -t mentorme:local .` and `docker build -f Dockerfile.vercel -t mentorme:vercel .` from this directory.
 
 ## Production configuration principles
 
