@@ -2,64 +2,66 @@
 
 **Project:** Tutor-Match: Academic Peer Mentoring  
 **Developer:** DahnialTahir97  
-**Implementation:** Java web application (Spring Boot), Maven, Thymeleaf, MySQL  
-**Database reference:** Final ERD supplied for this individual project.
+**Stack:** Java 21, Spring Boot 3.5.x, Maven, Thymeleaf, MySQL  
+**Database authority:** Final `ERD_MentorMe.pdf` supplied for this individual project.
 
-## Purpose
+## Repository separation
 
-This repository path is the developer's personal workspace for building an individual implementation of MentorMe. It is separate from the group repository.
+This is the developer's personal implementation workspace. The group repository is a reference only. Do not push individual work to the group repository.
 
-## Authoritative database design
+## Final ERD — eight tables
 
-Use the final ERD supplied for this project. It contains these eight tables:
+1. `faculty`: `faculty_id`, `name`
+2. `users`: `user_id`, `full_name`, `email`, `password`, `role`, `faculty_id`
+3. `subject`: `subject_id`, `subject_code`, `subject_name`, `faculty_id`
+4. `tutor_profile`: `tutor_profile_id`, `user_id`, `bio`, `hourly_rate`
+5. `tutor_subject`: `tutor_subject_id`, `tutor_profile_id`, `subject_id`
+6. `availability`: `availability_id`, `tutor_profile_id`, `day_of_week`, `start_time`, `end_time`
+7. `booking`: `booking_id`, `student_id`, `tutor_profile_id`, `availability_id`, `session_date`, `status`
+8. `review`: `review_id`, `booking_id`, `rating`, `comment`
 
-1. `faculty`
-2. `users`
-3. `subject`
-4. `tutor_profile`
-5. `tutor_subject`
-6. `availability`
-7. `booking`
-8. `review`
+The schema file includes primary keys, foreign keys, uniqueness rules and basic checks. Confirm all constraints against the lecturer's ERD before production use.
 
-Do not substitute the earlier ERD or rename columns without first reconciling the change with the final ERD.
+## Current implementation status
 
-## Planned technology
+- [x] Individual development branch created: `mentorme-development`
+- [x] Maven / Spring Boot project descriptor
+- [x] Application entry point
+- [x] MySQL schema for the eight ERD tables
+- [x] Eight JPA entity classes
+- [x] Eight Spring Data repository interfaces
+- [x] Basic landing page and stylesheet
+- [x] Initial development security configuration (public access only; not production-ready)
+- [ ] Database-backed registration and login
+- [ ] Role-based Student, Tutor and Admin authorization
+- [ ] Admin faculty and subject management
+- [ ] Tutor profile, subjects and availability management
+- [ ] Student tutor search and booking
+- [ ] Booking conflict handling and status workflow
+- [ ] Reviews
+- [ ] Automated tests and security verification
+- [ ] Production environment variables, cloud MySQL and deployment
 
-- Java 21 (target; verify installed JDK before development)
-- Spring Boot
-- Maven
-- Thymeleaf, HTML, CSS and JavaScript
-- MySQL
-- Spring Data JPA / JDBC
-- Git and GitHub
-- Deployment target: a Java-compatible host such as Render; MySQL hosted separately
+## Local setup (when using the home laptop)
 
-## Planned development stages
+1. Install JDK 21, Apache NetBeans, MySQL Server and Git.
+2. Clone this repository and open the `MentorMe` folder as a Maven project in NetBeans.
+3. Run `database/schema.sql` in MySQL Workbench.
+4. Set the environment variables `DB_URL`, `DB_USERNAME` and `DB_PASSWORD` for the local MySQL instance.
+5. Run the Spring Boot main class `com.mentorme.MentorMeApplication`.
+6. Open `http://localhost:8080`.
 
-- [ ] Verify Java JDK and NetBeans installation
-- [ ] Create the Spring Boot Maven application
-- [ ] Implement the eight-table MySQL schema from the final ERD
-- [ ] Connect the application to MySQL
-- [ ] Implement authentication and role-based access (Student, Tutor, Admin)
-- [ ] Implement faculty and subject management
-- [ ] Implement tutor profile, tutor-subject mapping and hourly rate
-- [ ] Implement tutor availability
-- [ ] Implement student search and booking
-- [ ] Implement booking status management
-- [ ] Implement reviews
-- [ ] Test validation, authorization, booking conflicts and security
-- [ ] Configure production database and deployment
-- [ ] Document setup and demonstration steps
+The application has not yet been built or tested in a local Java runtime. Treat the above as the setup target; verify each step on the home laptop.
 
-## Individual development practice
+## Security rules
 
-- Develop and commit work under this personal repository.
-- Keep credentials, database passwords, API keys and environment files out of Git.
-- Use clear, incremental commits.
-- Record design decisions and testing results as work progresses.
-- Treat any group repository as a reference only; do not push individual work to it.
+- Never commit real database credentials, API keys or secrets.
+- Passwords must be stored using a strong one-way password hash (BCrypt or equivalent).
+- Public registration must never allow a user to self-assign the Admin role.
+- Enforce authorization on the server, not only by hiding interface links.
+- Booking creation must validate the selected tutor, availability, date and slot conflict in a database transaction.
+- The current permissive development security configuration must be replaced before public deployment.
 
-## Current status
+## Development conventions
 
-Workspace initialized. Application code and database schema have not yet been implemented.
+Use small, meaningful commits. Keep the final ERD as the source of truth. Document changes to database structure and test each feature before moving to the next stage.
