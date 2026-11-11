@@ -5,20 +5,29 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "users")
 public class UserAccount {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long userId;
+
     @Column(name = "full_name", nullable = false, length = 100)
     private String fullName;
+
     @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;
+
     @Column(name = "password", nullable = false, length = 255)
     private String password;
+
     @Column(name = "role", nullable = false, length = 20)
     private String role;
+
     @Column(name = "faculty_id", nullable = false)
     private Long facultyId;
-    protected UserAccount() {}
+
+    // JPA requires a public or protected no-argument constructor.
+    public UserAccount() {}
+
     public Long getUserId() { return userId; }
     public String getFullName() { return fullName; }
     public void setFullName(String fullName) { this.fullName = fullName; }
