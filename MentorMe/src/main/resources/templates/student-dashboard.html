@@ -3,7 +3,7 @@
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Student | MentorMe</title><link rel="stylesheet" th:href="@{/css/style.css}"></head>
 <body>
 <header class="topbar"><a class="brand" th:href="@{/}">Mentor<span>Me</span></a><form th:action="@{/logout}" method="post"><button class="nav-register" type="submit">Logout</button></form></header>
-<main class="dashboard">
+<main class="dashboard"><p class="notice" th:if="${success}" th:text="${success}"></p><p class="notice" th:if="${error}" th:text="${error}"></p>
 <p class="eyebrow">STUDENT SPACE</p><h1>Find your peer tutor</h1><p>Explore academic subjects and peer mentoring.</p>
 <h2>Available tutors</h2>
 <div class="feature-grid">
@@ -12,7 +12,7 @@
 <p th:text="${t.faculty_name}">Faculty</p>
 <p th:text="${t.bio}">Tutor introduction</p>
 <p><strong>Subjects:</strong> <span th:text="${t.subject_codes != null ? t.subject_codes : 'Not listed yet'}">CSC584</span></p>
-<p><strong>Rate:</strong> RM <span th:text="${t.hourly_rate}">0.00</span> / hour</p>
+<p><strong>Rate:</strong> RM <span th:text="${t.hourly_rate}">0.00</span> / hour</p><form method="post" th:action="@{/student/bookings}"><input type="hidden" name="tutorProfileId" th:value="${t.tutor_profile_id}"><label>Available time</label><select name="availabilityId" required><option value="">Choose a slot</option><option th:each="slot : ${tutorSlots}" th:if="${slot.tutor_profile_id == t.tutor_profile_id}" th:value="${slot.availability_id}" th:text="${slot.day_of_week + ' | ' + slot.start_time + ' - ' + slot.end_time}"></option></select><label>Session date</label><input type="date" name="sessionDate" required><button class="primary-button" type="submit">Request booking</button></form>
 </article>
 </div>
 <p class="notice" th:if="${#lists.isEmpty(tutorDirectory)}">No tutors available yet. Please check again later.</p>
@@ -20,7 +20,7 @@
 <div class="feature-grid" th:if="${myBookings != null and !#lists.isEmpty(myBookings)}">
 <article th:each="b : ${myBookings}">
 <h3 th:text="${b.tutor_name}">Tutor</h3><p>Session: <span th:text="${b.session_date}">Date</span></p>
-<p>Status: <strong th:text="${b.status}">PENDING</strong></p>
+<p>Status: <strong th:text="${b.status}">PENDING</strong></p><form th:if="${b.status == 'PENDING'}" method="post" th:action="@{/student/bookings/cancel}"><input type="hidden" name="bookingId" th:value="${b.booking_id}"><button class="nav-register" type="submit">Cancel request</button></form>
 </article>
 </div>
 <p class="notice" th:if="${myBookings == null or #lists.isEmpty(myBookings)}">You have no bookings yet.</p>
