@@ -11,12 +11,15 @@
 - Student, Tutor and Admin dashboard starting pages
 - Development faculty seed data
 - GitHub Actions Maven build workflow
-- Java 21 multi-stage Dockerfile for container-based deployment
+- Java 21 multi-stage Dockerfile for local/container deployment
+- Vercel-specific `Dockerfile.vercel` entrypoint
+- Exact dashboard URL role checks (`/admin`, `/tutor`, `/student`) are enforced
 
 ## Verification status
 
 - GitHub Actions has been configured to compile and test every relevant push.
-- The last recorded workflow run failed because the registration service could not call the protected JPA entity constructor. That issue has been corrected in the latest commit; the new workflow result must be checked before calling the build green.
+- GitHub Actions run #20 completed successfully, including Maven verification and the standard Docker image build.
+- A follow-up hardening change fixed role matching for exact dashboard URLs and added a Vercel-specific container build. Its new CI run must pass before considering that change verified.
 - Cloud database connectivity and live deployment have not been tested.
 - The database schema still needs a final column-by-column comparison with the lecturer-approved ERD before production data is created.
 
@@ -32,7 +35,7 @@
 
 ## Deployment preparation
 
-- Vercel: container image is prepared with the Java 21 Dockerfile. Vercel's current container/backend offering and account-plan availability must be confirmed at deployment time.
+- Vercel: `Dockerfile.vercel` is prepared. Set Vercel Root Directory to `MentorMe`; Vercel documents OCI container images through Vercel Functions. Confirm current plan limits and deployment eligibility at setup time.
 - MySQL: schema and environment-variable based JDBC configuration are prepared. A managed MySQL instance, TLS requirements and credentials will be configured later.
 - Never commit production passwords, database URLs containing credentials, API keys or other secrets.
 - Do not use Hibernate schema auto-update in production. Keep `spring.jpa.hibernate.ddl-auto=validate`.
