@@ -11,15 +11,15 @@ public class Review {
     @Column(name = "booking_id", nullable = false, unique = true)
     private Long bookingId;
     @Column(name = "rating", nullable = false)
-    private Integer rating;
+    private Byte rating;
     @Column(name = "comment", columnDefinition = "TEXT")
     private String comment;
     protected Review() {}
     public Long getReviewId() { return reviewId; }
     public Long getBookingId() { return bookingId; }
     public void setBookingId(Long bookingId) { this.bookingId = bookingId; }
-    public Integer getRating() { return rating; }
-    public void setRating(Integer rating) { this.rating = rating; }
+    public Byte getRating() { return rating; }
+    public void setRating(Byte rating) { this.rating = rating; }
     public String getComment() { return comment; }
     public void setComment(String comment) { this.comment = comment; }
 }
