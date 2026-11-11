@@ -2,66 +2,65 @@
 
 **Project:** Tutor-Match: Academic Peer Mentoring  
 **Developer:** DahnialTahir97  
-**Stack:** Java 21, Spring Boot 3.5.x, Maven, Thymeleaf, MySQL  
-**Database authority:** Final `ERD_MentorMe.pdf` supplied for this individual project.
+**Stack:** Java 21, Spring Boot 3.5.x, Maven, Thymeleaf, MySQL, Docker  
+**Source of truth:** Lecturer-approved MentorMe ERD.
 
 ## Repository separation
 
-This is the developer's personal implementation workspace. The group repository is a reference only. Do not push individual work to the group repository.
+This is the individual implementation workspace. The group repository is reference material only. Individual work stays in this repository and on the `mentorme-development` branch.
 
-## Final ERD — eight tables
+## Database design — eight ERD tables
 
-1. `faculty`: `faculty_id`, `name`
-2. `users`: `user_id`, `full_name`, `email`, `password`, `role`, `faculty_id`
-3. `subject`: `subject_id`, `subject_code`, `subject_name`, `faculty_id`
-4. `tutor_profile`: `tutor_profile_id`, `user_id`, `bio`, `hourly_rate`
-5. `tutor_subject`: `tutor_subject_id`, `tutor_profile_id`, `subject_id`
-6. `availability`: `availability_id`, `tutor_profile_id`, `day_of_week`, `start_time`, `end_time`
-7. `booking`: `booking_id`, `student_id`, `tutor_profile_id`, `availability_id`, `session_date`, `status`
-8. `review`: `review_id`, `booking_id`, `rating`, `comment`
+1. `faculty`
+2. `users`
+3. `subject`
+4. `tutor_profile`
+5. `tutor_subject`
+6. `availability`
+7. `booking`
+8. `review`
 
-The schema file includes primary keys, foreign keys, uniqueness rules and basic checks. Confirm all constraints against the lecturer's ERD before production use.
+See `database/schema.sql` for the current MySQL DDL and `database/seed-development.sql` for non-production sample faculty. The schema was initially transcribed from the ERD notes available during development. Before production, compare every column, datatype, key and relationship with the lecturer-approved ERD; do not treat inferred details as confirmed.
 
-## Current implementation status
+## Technology and deployment architecture
 
-- [x] Individual development branch created: `mentorme-development`
-- [x] Maven / Spring Boot project descriptor
-- [x] Application entry point
-- [x] MySQL schema for the eight ERD tables
-- [x] Eight JPA entity classes
-- [x] Eight Spring Data repository interfaces
-- [x] Basic landing page and stylesheet
-- [x] Initial development security configuration (public access only; not production-ready)
-- [ ] Database-backed registration and login
-- [ ] Role-based Student, Tutor and Admin authorization
-- [ ] Admin faculty and subject management
-- [ ] Tutor profile, subjects and availability management
-- [ ] Student tutor search and booking
-- [ ] Booking conflict handling and status workflow
-- [ ] Reviews
-- [ ] Automated tests and security verification
-- [ ] Production environment variables, cloud MySQL and deployment
+- **GitHub:** source code, version history and automated build/test workflow.
+- **Java 21 + Spring Boot:** application and server-side business logic.
+- **Thymeleaf:** server-rendered web interface.
+- **MySQL:** relational persistence.
+- **Docker:** reproducible Java runtime image.
+- **Vercel:** target deployment platform. Its current container/backend capabilities can run custom containerized workloads; confirm project/plan availability and deployment configuration when creating the Vercel project.
 
-## Local setup (when using the home laptop)
+The current application is a single Spring Boot web application (UI and server-side logic together), packaged as a container. It is not a separate React/Next.js frontend plus REST API. This avoids maintaining two separate codebases for the current project.
 
-1. Install JDK 21, Apache NetBeans, MySQL Server and Git.
-2. Clone this repository and open the `MentorMe` folder as a Maven project in NetBeans.
-3. Run `database/schema.sql` in MySQL Workbench.
-4. Set the environment variables `DB_URL`, `DB_USERNAME` and `DB_PASSWORD` for the local MySQL instance.
-5. Run the Spring Boot main class `com.mentorme.MentorMeApplication`.
+## Run and configure
+
+Required: JDK 21, Maven 3.9+, and MySQL 8.0+.
+
+1. Create a local database named `mentorme_db`.
+2. Execute `database/schema.sql` in MySQL.
+3. Optionally execute `database/seed-development.sql` for sample faculty rows.
+4. Set environment variables:
+   - `DB_URL=jdbc:mysql://localhost:3306/mentorme_db`
+   - `DB_USERNAME=your_local_mysql_user`
+   - `DB_PASSWORD=your_local_mysql_password`
+   - `PORT=8080` (optional)
+5. Run `mvn spring-boot:run` from this `MentorMe` directory.
 6. Open `http://localhost:8080`.
 
-The application has not yet been built or tested in a local Java runtime. Treat the above as the setup target; verify each step on the home laptop.
+Build check: `mvn --batch-mode verify`.
 
-## Security rules
+Container check: `docker build -t mentorme:local .` from this directory.
 
-- Never commit real database credentials, API keys or secrets.
-- Passwords must be stored using a strong one-way password hash (BCrypt or equivalent).
-- Public registration must never allow a user to self-assign the Admin role.
-- Enforce authorization on the server, not only by hiding interface links.
-- Booking creation must validate the selected tutor, availability, date and slot conflict in a database transaction.
-- The current permissive development security configuration must be replaced before public deployment.
+## Production configuration principles
 
-## Development conventions
+- Production database credentials must be stored as deployment environment secrets, never in Git.
+- Keep `spring.jpa.hibernate.ddl-auto=validate`; database structure changes must be reviewed and applied through versioned SQL migrations.
+- Public registration must never allow users to select the Admin role.
+- Authorization must be enforced on the server.
+- Booking creation must validate the tutor, selected availability, date and slot conflict inside a database transaction.
+- Cloud MySQL TLS/network settings must be confirmed with the selected provider before deployment.
 
-Use small, meaningful commits. Keep the final ERD as the source of truth. Document changes to database structure and test each feature before moving to the next stage.
+## Current progress
+
+See `docs/DEVELOPMENT_STATUS.md` for completed work, verification status and remaining features. This is still under development; do not treat the current dashboards as a finished booking platform.
