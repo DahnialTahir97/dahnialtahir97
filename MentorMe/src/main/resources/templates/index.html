@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MentorMe | Academic Peer Mentoring</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header class="topbar">
+    <a class="brand" th:href="@{/}">Mentor<span>Me</span></a>
+    <nav aria-label="Main navigation">
+        <a href="#how-it-works">How it works</a>
+        <a href="#about">About</a>
+        <a class="nav-login" th:href="@{/login}">Login</a>
+        <a class="nav-register" th:href="@{/register}">Get started</a>
+    </nav>
+</header>
+<main>
+    <section class="hero">
+        <div class="hero-copy">
+            <p class="eyebrow">TUTOR-MATCH · ACADEMIC PEER MENTORING</p>
+            <h1>Learn together.<br><span>Grow together.</span></h1>
+            <p class="lead">Find a peer tutor, strengthen your understanding and make every study session count.</p>
+            <a class="primary-button" th:href="@{/register}">Join MentorMe</a>
+        </div>
+        <div class="hero-card" aria-label="MentorMe introduction">
+            <div class="orb">M</div>
+            <p class="card-label">YOUR LEARNING COMMUNITY</p>
+            <h2>Good learning starts with the right connection.</h2>
+            <p>Connect with fellow students who can help you move forward.</p>
+        </div>
+    </section>
+    <section id="how-it-works" class="features">
+        <p class="eyebrow">SIMPLE AND SUPPORTIVE</p>
+        <h2>How MentorMe works</h2>
+        <div class="feature-grid">
+            <article><span>01</span><h3>Find a tutor</h3><p>Explore peer tutors by subject and faculty.</p></article>
+            <article><span>02</span><h3>Choose a session</h3><p>Review tutor availability and request a session.</p></article>
+            <article><span>03</span><h3>Learn and review</h3><p>Meet your tutor and share feedback after the session.</p></article>
+        </div>
+    </section>
+    <section id="about" class="about">
+        <h2>Peer support for better learning.</h2>
+        <p>MentorMe brings students and peer tutors together through a simple academic mentoring experience.</p>
+    </section>
+</main>
+<footer>© 2026 MentorMe · Academic Peer Mentoring</footer>
+</body>
+</html>
