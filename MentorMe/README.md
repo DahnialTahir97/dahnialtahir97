@@ -46,7 +46,7 @@ Required: JDK 21, Maven 3.9+, and MySQL 8.0+.
    - `DB_PASSWORD=your_local_mysql_password`
    - `PORT=8080` (optional)
 5. Run `mvn spring-boot:run` from this `MentorMe` directory.
-6. Open `http://localhost:8080`.
+6. To load fictional demo records, set `MENTORME_DEMO_DATA_ENABLED=true` before starting the app. The seeder is disabled by default and can be safely run more than once.\n7. Open `http://localhost:8080`.\n\n### Demo accounts\n\nWhen demo seeding is enabled, use these accounts (all fictional):\n\n| Role | Email | Password |\n|---|---|---|\n| Admin | `admin@mentorme.demo` | `AdminDemo123!` |\n| Tutor | `aisyah.tutor@mentorme.demo` | `TutorDemo123!` |\n| Tutor | `daniel.tutor@mentorme.demo` | `TutorDemo123!` |\n| Student | `iman.student@mentorme.demo` | `StudentDemo123!` |\n| Student | `amir.student@mentorme.demo` | `StudentDemo123!` |\n| Student | `sofia.student@mentorme.demo` | `StudentDemo123!` |\n\nDemo accounts are for coursework/testing only. Do not enable the demo seeder on a public production database; it creates predictable demo credentials.
 
 Build check: `mvn --batch-mode verify`.
 
