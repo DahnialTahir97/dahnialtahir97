@@ -53,7 +53,7 @@ public class DashboardController {
             tutors.findByUserId(user.getUserId()).ifPresent(profile -> {
                 model.addAttribute("profile", profile);
                 model.addAttribute("tutorBookings", jdbc.queryForList(
-                        "SELECT b.booking_id, su.full_name AS student_name, b.session_date, b.status " +
+                        "SELECT b.booking_id, b.availability_id, su.full_name AS student_name, b.session_date, b.status " +
                         "FROM booking b JOIN users su ON su.user_id = b.student_id " +
                         "WHERE b.tutor_profile_id = ? ORDER BY b.session_date DESC",
                         profile.getTutorProfileId()));
@@ -78,6 +78,9 @@ public class DashboardController {
                 "LEFT JOIN subject s ON s.subject_id = ts.subject_id " +
                 "GROUP BY tp.tutor_profile_id, u.full_name, f.name, tp.bio, tp.hourly_rate " +
                 "ORDER BY u.full_name"));
+        model.addAttribute("tutorSlots", jdbc.queryForList(
+                "SELECT availability_id, tutor_profile_id, day_of_week, start_time, end_time " +
+                "FROM availability ORDER BY day_of_week, start_time"));
         users.findByEmailIgnoreCase(authentication.getName()).ifPresent(user ->
                 model.addAttribute("myBookings", jdbc.queryForList(
                         "SELECT b.booking_id, tu.full_name AS tutor_name, b.session_date, b.status " +
