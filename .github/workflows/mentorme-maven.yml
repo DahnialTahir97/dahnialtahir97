@@ -24,7 +24,9 @@ jobs:
           distribution: temurin
           java-version: "21"
           cache: maven
-      - name: Build and test
+      - name: Compile and test
         run: mvn --batch-mode verify
-      - name: Verify deployment container
+      - name: Verify standard Docker image
         run: docker build --tag mentorme:ci .
+      - name: Verify Vercel container image
+        run: docker build --file Dockerfile.vercel --tag mentorme:vercel-ci .
