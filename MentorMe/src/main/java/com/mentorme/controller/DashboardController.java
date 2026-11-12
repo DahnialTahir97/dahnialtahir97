@@ -57,8 +57,13 @@ public class DashboardController {
                         "FROM booking b JOIN users su ON su.user_id = b.student_id " +
                         "WHERE b.tutor_profile_id = ? ORDER BY b.session_date DESC",
                         profile.getTutorProfileId()));
+                model.addAttribute("tutorSubjects", jdbc.queryForList(
+                        "SELECT s.subject_id, s.subject_code, s.subject_name FROM tutor_subject ts " +
+                        "JOIN subject s ON s.subject_id = ts.subject_id WHERE ts.tutor_profile_id = ? ORDER BY s.subject_code",
+                        profile.getTutorProfileId()));
+                model.addAttribute("allSubjects", jdbc.queryForList("SELECT subject_id, subject_code, subject_name FROM subject ORDER BY subject_code"));
                 model.addAttribute("tutorAvailability", jdbc.queryForList(
-                        "SELECT day_of_week, start_time, end_time FROM availability " +
+                        "SELECT availability_id, day_of_week, start_time, end_time FROM availability " +
                         "WHERE tutor_profile_id = ? ORDER BY day_of_week, start_time",
                         profile.getTutorProfileId()));
             });
@@ -83,7 +88,8 @@ public class DashboardController {
                 "FROM availability ORDER BY day_of_week, start_time"));
         users.findByEmailIgnoreCase(authentication.getName()).ifPresent(user ->
                 model.addAttribute("myBookings", jdbc.queryForList(
-                        "SELECT b.booking_id, tu.full_name AS tutor_name, b.session_date, b.status " +
+                        "SELECT b.booking_id, tu.full_name AS tutor_name, b.session_date, b.status, " +
+                        "EXISTS (SELECT 1 FROM review r WHERE r.booking_id = b.booking_id) AS reviewed " +
                         "FROM booking b JOIN tutor_profile tp ON tp.tutor_profile_id = b.tutor_profile_id " +
                         "JOIN users tu ON tu.user_id = tp.user_id WHERE b.student_id = ? " +
                         "ORDER BY b.session_date DESC", user.getUserId())));
