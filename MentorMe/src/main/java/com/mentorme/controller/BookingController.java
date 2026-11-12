@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,13 +16,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class BookingController {
-    private static final List<String> ACTIVE_STATUSES = List.of("PENDING", "APPROVED");
     private final JdbcTemplate jdbc;
 
     public BookingController(JdbcTemplate jdbc) {
         this.jdbc = jdbc;
     }
 
+    @Transactional
     @PostMapping("/student/bookings")
     public String createBooking(@RequestParam Long tutorProfileId,
                                 @RequestParam Long availabilityId,
@@ -36,7 +37,7 @@ public class BookingController {
             }
             Long studentId = userId(authentication.getName());
             Map<String, Object> slot = jdbc.queryForMap(
-                    "SELECT tutor_profile_id, day_of_week FROM availability WHERE availability_id = ?",
+                    "SELECT tutor_profile_id, day_of_week FROM availability WHERE availability_id = ? FOR UPDATE",
                     availabilityId);
             if (((Number) slot.get("tutor_profile_id")).longValue() != tutorProfileId) {
                 redirect.addFlashAttribute("error", "The selected time slot does not belong to this tutor.");
@@ -70,6 +71,7 @@ public class BookingController {
         return "redirect:/student";
     }
 
+    @Transactional
     @PostMapping("/student/bookings/cancel")
     public String cancelStudentBooking(@RequestParam Long bookingId, Authentication authentication,
                                        RedirectAttributes redirect) {
@@ -82,6 +84,7 @@ public class BookingController {
         return "redirect:/student";
     }
 
+    @Transactional
     @PostMapping("/tutor/bookings/status")
     public String updateTutorBooking(@RequestParam Long bookingId, @RequestParam String status,
                                      Authentication authentication, RedirectAttributes redirect) {
@@ -90,9 +93,15 @@ public class BookingController {
             return "redirect:/tutor";
         }
         Long userId = userId(authentication.getName());
-        String current = jdbc.queryForObject(
-                "SELECT b.status FROM booking b JOIN tutor_profile tp ON tp.tutor_profile_id = b.tutor_profile_id " +
-                "WHERE b.booking_id = ? AND tp.user_id = ?", String.class, bookingId, userId);
+        String current;
+        try {
+            current = jdbc.queryForObject(
+                    "SELECT b.status FROM booking b JOIN tutor_profile tp ON tp.tutor_profile_id = b.tutor_profile_id " +
+                    "WHERE b.booking_id = ? AND tp.user_id = ? FOR UPDATE", String.class, bookingId, userId);
+        } catch (org.springframework.dao.EmptyResultDataAccessException ex) {
+            redirect.addFlashAttribute("error", "Booking not found for your tutor account.");
+            return "redirect:/tutor";
+        }
         boolean allowed = ("APPROVED".equals(status) && "PENDING".equals(current))
                 || ("COMPLETED".equals(status) && "APPROVED".equals(current))
                 || ("CANCELLED".equals(status) && ("PENDING".equals(current) || "APPROVED".equals(current)));
@@ -100,7 +109,7 @@ public class BookingController {
             redirect.addFlashAttribute("error", "This booking status change is not allowed.");
             return "redirect:/tutor";
         }
-        jdbc.update("UPDATE booking SET status = ? WHERE booking_id = ?", status, bookingId);
+        jdbc.update("UPDATE booking SET status = ? WHERE booking_id = ? AND status = ?", status, bookingId, current);
         redirect.addFlashAttribute("success", "Booking status updated to " + status + ".");
         return "redirect:/tutor";
     }
