@@ -38,6 +38,8 @@ public class DashboardController {
         model.addAttribute("facultyCount", faculties.count());
         model.addAttribute("subjectCount", subjects.count());
         model.addAttribute("bookingCount", bookings.count());
+        model.addAttribute("facultyList", jdbc.queryForList("SELECT faculty_id, name FROM faculty ORDER BY name"));
+        model.addAttribute("subjectList", jdbc.queryForList("SELECT s.subject_id, s.subject_code, s.subject_name, f.name AS faculty_name FROM subject s JOIN faculty f ON f.faculty_id = s.faculty_id ORDER BY s.subject_code"));
         model.addAttribute("recentBookings", jdbc.queryForList(
                 "SELECT b.booking_id, u.full_name AS student_name, tu.full_name AS tutor_name, " +
                 "b.session_date, b.status FROM booking b " +
